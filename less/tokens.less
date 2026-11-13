@@ -1,0 +1,200 @@
+// ---------------------------------------------------------------------------
+// Fonts — Young Serif for headings, Nunito for everything else. Self-hosted.
+//
+// Served from the forum's own assets (Flarum copies assets/ to
+// /assets/extensions/ernestdefoe-hearth/ when the extension is enabled), not
+// from Google: no third-party connection on every page and no visitor IP sent
+// to a font CDN. Each face is split by unicode-range, so a browser fetches
+// latin-ext or the italic only when a page uses them. The URLs are relative to
+// the compiled stylesheet, so they follow the assets disk wherever it is.
+// ---------------------------------------------------------------------------
+
+@hearth-fonts: "extensions/ernestdefoe-hearth/fonts";
+@hearth-latin: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+@hearth-latin-ext: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+
+.hearth-face(@family; @file; @weight; @style; @range) {
+  @font-face {
+    font-family: @family;
+    font-style: @style;
+    font-display: swap;
+    font-weight: @weight;
+    src: url("@{hearth-fonts}/@{file}.woff2") format('woff2');
+    unicode-range: @range;
+  }
+}
+
+.hearth-face('Young Serif'; 'young-serif-latin-400-normal'; 400; normal; @hearth-latin);
+.hearth-face('Young Serif'; 'young-serif-latin-ext-400-normal'; 400; normal; @hearth-latin-ext);
+.hearth-face('Nunito'; 'nunito-latin-wght-normal'; ~'200 1000'; normal; @hearth-latin);
+.hearth-face('Nunito'; 'nunito-latin-ext-wght-normal'; ~'200 1000'; normal; @hearth-latin-ext);
+.hearth-face('Nunito'; 'nunito-latin-wght-italic'; ~'200 1000'; italic; @hearth-latin);
+.hearth-face('Nunito'; 'nunito-latin-ext-wght-italic'; ~'200 1000'; italic; @hearth-latin-ext);
+
+// ---------------------------------------------------------------------------
+// Core's own palette, re-pointed.
+//
+// 🚨 Flarum's LESS variables are lazily evaluated and this file is compiled
+// after core's, so re-declaring them re-themes EVERY core component (modals,
+// dropdowns, the composer, the post stream) without a selector of ours.
+// Anything Hearth draws itself uses the --hearth-* tokens below, which follow
+// the same light/dark switch. @primary-color is left alone: it is the owner's
+// colour, and Flarum's coloured header still uses it.
+// ---------------------------------------------------------------------------
+
+@body-bg-light: #F5EEE2;
+@text-color-light: #3A2E27;
+@heading-color-light: #3A2E27;
+@muted-color-light: #6E5F54;
+@muted-more-color-light: #8C7D70;
+@control-bg-light: #ECE2D0;
+@control-color-light: #5A4A40;
+@header-bg-light: #F5EEE2;
+@header-color-light: #3A2E27;
+@header-control-bg-light: #FFFBF3;
+@header-control-color-light: #3A2E27;
+@code-bg-light: #F1E7D5;
+@code-color-light: #4A3B31;
+@discussion-title-color-light: #3A2E27;
+@overlay-bg-light: fade(#3A2E27, 55%);
+@shadow-color-light: rgba(90, 60, 30, 0.28);
+
+// Evening: lamplight, not a black screen.
+@body-bg-dark: #1F1814;
+@text-color-dark: #F1E6D6;
+@heading-color-dark: #F1E6D6;
+@muted-color-dark: #B9A895;
+@muted-more-color-dark: #8E7E6D;
+@control-bg-dark: #2E241E;
+@control-color-dark: #CDBDA9;
+@header-bg-dark: #1F1814;
+@header-color-dark: #F1E6D6;
+@header-control-bg-dark: #2A211C;
+@header-control-color-dark: #F1E6D6;
+@code-bg-dark: #171210;
+@code-color-dark: #F1E6D6;
+@discussion-title-color-dark: #F1E6D6;
+@overlay-bg-dark: fade(#0E0A08, 80%);
+@shadow-color-dark: rgba(0, 0, 0, 0.55);
+
+// ---------------------------------------------------------------------------
+// Hearth's palette: FOUR base colours, everything else derived from them.
+//
+// The owner picks the accent and the paper (Daytime) and the Evening accent
+// and ground in the admin panel; extend.php sets the four on :root:root.
+// Cards, lines, tints, hovers, your own bubbles and the buttons all follow,
+// so one pick recolours the whole theme. Text stays Hearth's warm browns,
+// which is why paper is kept light and the ground dark (src/Palette.php).
+// ---------------------------------------------------------------------------
+
+:root {
+  --hearth-serif: 'Young Serif', Georgia, 'Times New Roman', serif;
+  --hearth-sans: 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --hearth-accent: #4F6F4B;
+  --hearth-on-accent: #FFFFFF;
+  --hearth-paper: #F5EEE2;
+  --hearth-evening-accent: #A9C4A0;
+  --hearth-ground: #1F1814;
+
+  // The brown everything is shaded with, and the fixed warm accents.
+  --hearth-umber: #7A5A2E;
+  --hearth-amber: #E3B04B;
+  --hearth-on-amber: #3A2E27;
+  --hearth-clay: #C98B4A;
+  --hearth-rose: #D98C7A;
+  --hearth-plum: #8C7BB0;
+  --hearth-red: #B5432E;
+
+  --hearth-bg: var(--hearth-paper);
+  --hearth-card: color-mix(in srgb, var(--hearth-paper) 30%, #FFFDF8);
+  --hearth-card-alt: color-mix(in srgb, var(--hearth-amber) 16%, var(--hearth-card));
+  --hearth-warm: color-mix(in srgb, var(--hearth-paper) 88%, var(--hearth-umber));
+  --hearth-line: color-mix(in srgb, var(--hearth-paper) 91%, var(--hearth-umber));
+  --hearth-dash: color-mix(in srgb, var(--hearth-paper) 76%, var(--hearth-umber));
+  --hearth-quote: color-mix(in srgb, var(--hearth-paper) 94%, var(--hearth-umber));
+  --hearth-text: #3A2E27;
+  --hearth-soft: #5A4A40;
+  --hearth-muted: #6E5F54;
+  --hearth-ink: #3A2E27;
+  --hearth-on-ink: #FFFBF3;
+
+  --hearth-sage: var(--hearth-accent);
+  --hearth-on-sage: var(--hearth-on-accent);
+  --hearth-link: color-mix(in srgb, var(--hearth-accent) 82%, #000);
+  --hearth-mine: color-mix(in srgb, var(--hearth-sage) 12%, var(--hearth-card));
+  --hearth-mine-line: color-mix(in srgb, var(--hearth-sage) 24%, var(--hearth-card));
+
+  --hearth-shadow: 0 1px 0 var(--hearth-line), 0 6px 18px -12px rgba(90, 60, 30, 0.25);
+  --hearth-lift: 0 1px 0 var(--hearth-line), 0 14px 30px -16px rgba(90, 60, 30, 0.35);
+  --hearth-radius: 20px;
+  --hearth-glow: transparent;
+}
+
+// 🚨 `^=`, so high-contrast dark ("dark-hc") is Evening too.
+[data-theme^='dark'] {
+  --hearth-umber: #F1E6D6;
+  --hearth-amber: #E8B65A;
+  --hearth-on-amber: #1F1814;
+  --hearth-clay: #D9A066;
+  --hearth-rose: #E0A493;
+  --hearth-plum: #B7A8D6;
+  --hearth-red: #F08A73;
+
+  --hearth-bg: var(--hearth-ground);
+  --hearth-card: color-mix(in srgb, var(--hearth-ground) 95%, var(--hearth-umber));
+  --hearth-card-alt: color-mix(in srgb, var(--hearth-amber) 10%, var(--hearth-card));
+  --hearth-warm: color-mix(in srgb, var(--hearth-ground) 93%, var(--hearth-umber));
+  --hearth-line: color-mix(in srgb, var(--hearth-ground) 89%, var(--hearth-umber));
+  --hearth-dash: color-mix(in srgb, var(--hearth-ground) 81%, var(--hearth-umber));
+  --hearth-quote: color-mix(in srgb, var(--hearth-ground) 88%, #000);
+  --hearth-text: #F1E6D6;
+  --hearth-soft: #CDBDA9;
+  --hearth-muted: #B9A895;
+  --hearth-ink: #F1E6D6;
+  --hearth-on-ink: #1F1814;
+
+  --hearth-sage: var(--hearth-evening-accent);
+  --hearth-on-sage: #1F1814;
+  // Links glow amber in the evening, whatever the accent.
+  --hearth-link: var(--hearth-amber);
+  --hearth-mine: color-mix(in srgb, var(--hearth-sage) 14%, var(--hearth-card));
+  --hearth-mine-line: color-mix(in srgb, var(--hearth-sage) 24%, var(--hearth-card));
+
+  --hearth-shadow: 0 1px 0 var(--hearth-line);
+  --hearth-lift: 0 1px 0 var(--hearth-line), 0 16px 32px -18px rgba(0, 0, 0, 0.8);
+  // The lamp: a warm pool of light at the top of the page.
+  --hearth-glow: rgba(232, 182, 90, 0.07);
+}
+
+// Core's own surfaces follow the picks too (modals, dropdowns, the composer,
+// the header), not just Hearth's components. Restated for dark so they win
+// over core's dark block whatever order the files land in.
+:root,
+[data-theme^='dark'] {
+  --body-bg: var(--hearth-bg);
+  --header-bg: var(--hearth-bg);
+  --control-bg: var(--hearth-warm);
+  --header-control-bg: var(--hearth-card);
+  --code-bg: var(--hearth-quote);
+}
+
+// Hearth's buttons, links and focus rings, whatever the owner's primary is.
+:root,
+[data-theme^='dark'] {
+  --link-color: var(--hearth-link);
+  --sidenav-color-active: var(--hearth-text);
+  --sidenav-color-hover: var(--hearth-text);
+  --button-primary-color: var(--hearth-on-sage);
+  --button-primary-bg: var(--hearth-sage);
+  --button-primary-bg-hover: color-mix(in srgb, var(--hearth-sage) 88%, #000);
+  --button-primary-bg-active: color-mix(in srgb, var(--hearth-sage) 78%, #000);
+  --button-primary-bg-disabled: var(--hearth-sage);
+  // Core's plain buttons (Follow, back, the toolbar) are compiled to a fixed
+  // beige; they follow the paper too.
+  --button-color: var(--hearth-soft);
+  --button-bg: var(--hearth-warm);
+  --button-bg-hover: color-mix(in srgb, var(--hearth-warm) 90%, var(--hearth-umber));
+  --button-bg-active: color-mix(in srgb, var(--hearth-warm) 82%, var(--hearth-umber));
+  --button-bg-disabled: var(--hearth-warm);
+}
