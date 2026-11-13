@@ -1,0 +1,70 @@
+// ---------------------------------------------------------------------------
+// Other extensions dressed to match: Homecoming's welcome strip (which Hearth
+// uses instead of its own card when it is on) and FoF Forum Widgets' cards.
+// ---------------------------------------------------------------------------
+
+.Homecoming {
+  // Its numbers and icons use the owner's primary; Hearth's link green fits.
+  --primary-color: var(--hearth-link);
+  --homecoming-card: var(--hearth-card);
+  --homecoming-soft: var(--hearth-warm);
+  --homecoming-border: transparent;
+  border-radius: var(--hearth-radius);
+  box-shadow: var(--hearth-shadow);
+  color: var(--hearth-text);
+}
+.Homecoming-strip {
+  --homecoming-card: var(--hearth-warm);
+  border-radius: 24px;
+  box-shadow: none;
+}
+.Homecoming-greeting,
+.Homecoming-heading {
+  font-family: var(--hearth-serif);
+  font-weight: 400;
+  color: var(--hearth-text);
+}
+.Homecoming-muted {
+  color: var(--hearth-muted);
+}
+
+// FoF Forum Widgets: every widget a soft card.
+.fof-widgets .Widget,
+.Widgets .Widget {
+  background: var(--hearth-card);
+  border-radius: var(--hearth-radius);
+  box-shadow: var(--hearth-shadow);
+  border: 0;
+  color: var(--hearth-text);
+}
+.fof-widgets .Widget-title,
+.Widgets .Widget-title {
+  font-family: var(--hearth-serif);
+  font-weight: 400;
+  color: var(--hearth-text);
+}
+// Hearth's own House rules card already is a card: no second frame around it.
+.Widget.HearthWidget {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+.HearthHouseRules--widget {
+  margin: 0;
+}
+
+// The header's Evening switch.
+.HearthEvening {
+  font-weight: 800;
+}
+
+// fof/discussion-views pins its count at a fixed spot (top 72px, right 0)
+// that assumes core's row height; on a card it lands on the reply count.
+// In Hearth it is part of the info line.
+html:not(#x-hi) .DiscussionListItem-info > .item-discussion-views {
+  position: static;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-inline-start: 8px;
+}
